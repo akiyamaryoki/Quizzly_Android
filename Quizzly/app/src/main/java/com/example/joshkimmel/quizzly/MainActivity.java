@@ -20,10 +20,13 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.telecom.Call;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Set;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,6 +49,20 @@ public class MainActivity extends AppCompatActivity {
         bluetoothDeviceAddress = getString(R.string.bluetoothDeviceAddress);
         TAG = getString(R.string.bluetoothLogTag);
         serverUuid = UUID.fromString(getString(R.string.bluetoothServerUuid));
+
+        EnableBluetooth();
+        ConnectToServer();
+    }
+
+    // Method to handle incoming data read from the server
+    private void OnRead (byte[] data) {
+        String strData = new String(data);
+        Log.i("ServerRead", strData);
+    }
+
+    private void OnConnect () {
+        String test = "{\"type\": \"playerCreation\", \"data\": {\"playerName\": \"Test\"}}";
+        WriteToServer(test.getBytes());
     }
 
     // Method to enable Bluetooth on the given device
@@ -67,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
 
         bluetoothDevice = bluetoothAdapter.getRemoteDevice(bluetoothDeviceAddress);
     }
+
+
 
     // Method to connect to the Bluetooth Server
     // Call this from the main activity
@@ -131,8 +150,10 @@ public class MainActivity extends AppCompatActivity {
                 // Connect to the remote device through the socket. This call blocks
                 // until it succeeds or throws an exception.
                 bluetoothSocket.connect();
+                Log.i("Testing", "Connected");
             } catch (IOException connectException) {
                 // Unable to connect; close the socket and return.
+                Log.e("Testing", "Connection Error", connectException);
                 try {
                     bluetoothSocket.close();
                 } catch (IOException closeException) {
@@ -183,12 +204,14 @@ public class MainActivity extends AppCompatActivity {
             int numBytes; // bytes returned from read()
 
             // Keep listening to the InputStream until an exception occurs.
+            OnConnect();
             while (true) {
                 try {
                     // Read from the InputStream.
                     numBytes = inStream.read(buffer);
 
                     //TODO: method to handle new data that's in the buffer
+                    OnRead(buffer);
                 } catch (IOException e) {
                     Log.d(TAG, "Input stream was disconnected", e);
                     break;

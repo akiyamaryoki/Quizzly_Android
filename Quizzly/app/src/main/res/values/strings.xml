@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Quizzly</string>
-    <string name="bluetoothDeviceAddress">MAC</string>
+    <string name="bluetoothDeviceAddress">3C:95:09:5C:E5:BC</string>
     <string name="bluetoothLogTag">BLUETOOTH</string>
-    <string name="bluetoothServerUuid">123e4567-e89b-42d3-a456-556642440000</string>
+    <string name="bluetoothServerUuid">17397638-30e6-4a5b-ac36-fbfda4b34d38</string>
 </resources>
