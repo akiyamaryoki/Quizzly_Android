@@ -20,6 +20,10 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.telecom.Call;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -28,6 +32,14 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import java.util.UUID;
+
+import android.os.*;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,17 +53,97 @@ public class MainActivity extends AppCompatActivity {
     private OutputStream outStream = null;
     private byte[] buffer;
 
+    private Handler mHandler;
+
+    private TextView question;
+    private RadioButton optionA;
+    private RadioButton optionB;
+    private RadioButton optionC;
+    private RadioButton optionD;
+    private String title;
+    private Button submit;
+    private JSONObject currentQuestion;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        question = (TextView) findViewById(R.id.question1);
+        optionA = (RadioButton) findViewById(R.id.buttonA);
+        optionB = (RadioButton) findViewById(R.id.buttonB);
+        optionC = (RadioButton) findViewById(R.id.buttonC);
+        optionD = (RadioButton) findViewById(R.id.buttonD);
+        submit = (Button) findViewById(R.id.buttonS);
+
         bluetoothDeviceAddress = getString(R.string.bluetoothDeviceAddress);
         TAG = getString(R.string.bluetoothLogTag);
         serverUuid = UUID.fromString(getString(R.string.bluetoothServerUuid));
 
+        mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                bluetoothRespond((byte[])msg.obj);
+            }
+        };
+
         EnableBluetooth();
         ConnectToServer();
+    }
+
+    private void bluetoothRespond(byte[] dataIn){
+        String input = new String(dataIn);
+        try {
+            JSONObject response = new JSONObject(input);
+            String type = response.getString("type");
+            switch (type) {
+                // case statements
+                // values must be of same type of expression
+                case "question":
+                    updateQuestion(response.getJSONObject("data"));
+                    break;
+
+                case "scoreUpdate":
+                    updateScore(response.getJSONObject("data"));
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (JSONException e) {
+            Log.e("MYAPP", "unexpected JSON exception", e);
+        }
+    }
+
+    protected void updateQuestion(JSONObject newQuestion) {
+        try
+        {
+            Log.i("Testing", newQuestion.toString());
+            currentQuestion = newQuestion;
+            question.setText(newQuestion.getString("question"));
+            String choiceA = newQuestion.getJSONArray("options").getString(0);
+            optionA.setText(choiceA);
+            String choiceB = newQuestion.getJSONArray("options").getString(1);
+            optionB.setText(choiceB);
+            String choiceC = newQuestion.getJSONArray("options").getString(2);
+            optionC.setText(choiceC);
+            String choiceD = newQuestion.getJSONArray("options").getString(3);
+            optionD.setText(choiceD);
+        }
+        catch (JSONException e)
+        {
+            Log.e("MYAPP", "unexpected JSON exception", e);
+        }
+
+    }
+
+    protected void updateScore (JSONObject newScore) {
+        Log.i("Testing", newScore.toString());
+        optionA.setChecked(false);
+        optionB.setChecked(false);
+        optionC.setChecked(false);
+        optionD.setChecked(false);
     }
 
     // Method to handle incoming data read from the server
@@ -211,12 +303,62 @@ public class MainActivity extends AppCompatActivity {
                     numBytes = inStream.read(buffer);
 
                     //TODO: method to handle new data that's in the buffer
-                    OnRead(buffer);
+                    Message msg = new Message();
+                    msg.obj = buffer;
+                    mHandler.sendMessage(msg);
                 } catch (IOException e) {
                     Log.d(TAG, "Input stream was disconnected", e);
                     break;
                 }
             }
         }
+    }
+
+    public void clickHandler(View view) {
+        int currentNum = -1;
+        try {
+            currentNum = currentQuestion.getInt("number");
+        }
+        catch (JSONException e)
+        {
+            Log.e("MYAPP", "unexpected JSON exception", e);
+        }
+
+        int answer = -1;
+        if(optionA.isChecked())
+        {
+            answer = 0;
+        }
+        if(optionB.isChecked())
+        {
+            answer = 1;
+        }
+        if(optionC.isChecked())
+        {
+            answer = 2;
+        }
+        if(optionD.isChecked())
+        {
+            answer = 3;
+        }
+
+        Log.i("Testing", "Hello");
+
+        JSONObject sendBack = new JSONObject();
+        JSONObject dataBack = new JSONObject();
+        try {
+            sendBack.put("type", "answer");
+            dataBack.put("number", currentNum);
+            dataBack.put("answer", answer);
+            sendBack.put("data", dataBack);
+        }
+        catch (JSONException e)
+        {
+            Log.e("MYAPP", "unexpected JSON exception", e);
+        }
+
+        Log.i("Testing", sendBack.toString());
+        WriteToServer(sendBack.toString().getBytes());
+
     }
 }
