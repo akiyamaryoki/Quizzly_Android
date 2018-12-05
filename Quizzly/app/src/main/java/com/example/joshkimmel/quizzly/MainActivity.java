@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private Button submit;
     private JSONObject currentQuestion;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
