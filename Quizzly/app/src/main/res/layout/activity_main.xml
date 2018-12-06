@@ -20,7 +20,8 @@
         android:onClick="clickHandler"
         app:layout_constraintBottom_toTopOf="@+id/barrier"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="invisible"/>
 
     <android.support.constraint.Barrier
         android:id="@+id/barrier"
@@ -40,7 +41,8 @@
         android:text="A"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/question1" />
+        app:layout_constraintTop_toBottomOf="@+id/question1"
+        android:visibility="invisible"/>
 
     <RadioButton
         android:id="@+id/buttonB"
@@ -54,7 +56,8 @@
         android:text="B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonA" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonA"
+        android:visibility="invisible"/>
 
     <RadioButton
         android:id="@+id/buttonC"
@@ -68,7 +71,8 @@
         android:text="C"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonB" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonB"
+        android:visibility="invisible"/>
 
     <RadioButton
         android:id="@+id/buttonD"
@@ -82,7 +86,8 @@
         android:text="D"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonC" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonC"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/question1"
@@ -96,7 +101,135 @@
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+
+        <TextView
+            android:id="@+id/place"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="19dp"
+            android:text="You came in Xth!"
+            android:textSize="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.062"
+            android:visibility="invisible"/>
+
+        <TableLayout
+            android:id="@+id/scoreTable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="87dp"
+            android:visibility="invisible">
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/playerName1"
+                    android:layout_width="189dp"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:text="Player 1"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/playerScore1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    android:text="N/A"
+                    android:textSize="20dp" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/playerName2"
+                    android:layout_width="189dp"
+                    android:padding="15dp"
+                    android:text="Player 2"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/playerScore2"
+                    android:layout_width="189dp"
+                    android:padding="15dp"
+                    android:text="N/A"
+                    android:textSize="20dp" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/playerName3"
+                    android:layout_width="189dp"
+                    android:padding="15dp"
+                    android:text="Player 3"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/playerScore3"
+                    android:layout_width="189dp"
+                    android:padding="15dp"
+                    android:text="N/A"
+                    android:textSize="20dp" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/playerName4"
+                    android:layout_width="189dp"
+                    android:padding="15dp"
+                    android:text="Player 4"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/playerScore4"
+                    android:layout_width="189dp"
+                    android:padding="15dp"
+                    android:text="N/A"
+                    android:textSize="20dp" />
+            </TableRow>
+
+        </TableLayout>
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="251dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:hint="Please enter a username."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.427"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/scoreTable" />
+
+    <Button
+        android:id="@+id/submit_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:onClick="playerCreateClick"
+        android:text="Join Game"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username" />
 
 
 </android.support.constraint.ConstraintLayout>
